@@ -10,43 +10,57 @@ typedef struct {
     int b;
 } Pair;
 
-// Stack 구조체: Pair를 저장하는 스택
-typedef struct {
-    Pair data[MAX_STACK_SIZE];
-    int top;
-} Stack;
+typedef Pair Element; // 스택 요소 타입을 Pair로 정의
+
+// 스택의 데이터 및 관련 변수
+Element data[MAX_STACK_SIZE]; // 스택 요소의 배열
+int top; // 스택 상단 인덱스
+
+void error(char str[]) {
+    printf("%s\n", str);
+    exit(1);
+}
 
 // 스택 초기화
-void initStack(Stack* s) {
-    s->top = -1;
+void init_stack() {
+    top = -1;
 }
 
 // 스택이 비었는지 검사
-int isEmpty(Stack* s) {
-    return s->top == -1;
+int is_empty() {
+    return top == -1;
 }
 
 // 스택이 가득 찼는지 검사
-int isFull(Stack* s) {
-    return s->top == MAX_STACK_SIZE - 1;
+int is_full() {
+    return top == (MAX_STACK_SIZE - 1);
 }
 
 // 스택에 데이터 삽입
-void push(Stack* s, Pair item) {
-    if (isFull(s)) {
-        fprintf(stderr, "Stack overflow\n");
-        exit(EXIT_FAILURE);
-    }
-    s->data[++(s->top)] = item;
+void push(Element e) {
+    if (is_full())
+        error("Overflow Error!");
+    else
+        data[++top] = e;
 }
 
 // 스택에서 데이터 삭제 및 반환
-Pair pop(Stack* s) {
-    if (isEmpty(s)) {
-        fprintf(stderr, "Stack underflow\n");
-        exit(EXIT_FAILURE);
-    }
-    return s->data[(s->top)--];
+Element pop() {
+    if (is_empty())
+        error("Underflow Error!");
+    return data[top--];
+}
+
+// 스택에서 최상단 요소 확인
+Element peek() {
+    if (is_empty())
+        error("Underflow Error!");
+    return data[top];
+}
+
+// 스택 크기 반환
+int size() {
+    return top + 1;
 }
 
 int main(void) {
@@ -71,24 +85,23 @@ int main(void) {
     int original_a = num1;
     int original_b = num2;
 
-    Stack stack;
-    initStack(&stack);
+    init_stack();
 
     // 초기 상태를 스택에 푸시: (a, b)
     Pair p = { num1, num2 };
-    push(&stack, p);
+    push(p);
 
     int gcd = 0;
     // 유클리드 알고리즘을 스택을 이용해 반복 실행
-    while (!isEmpty(&stack)) {
-        Pair current = pop(&stack);
+    while (!is_empty()) {
+        Pair current = pop();
         if (current.b == 0) {
             gcd = current.a;
             break;
         }
         else {
             Pair next = { current.b, current.a % current.b };
-            push(&stack, next);
+            push(next);
         }
     }
 
