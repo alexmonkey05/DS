@@ -4,34 +4,34 @@
 
 #define MAX_STACK_SIZE 100
 
-// Pair ±¸Á¶Ã¼: a¿Í b¸¦ ÀúÀåÇÏ¿© À¯Å¬¸®µå ¾Ë°í¸®ÁòÀÇ »óÅÂ¸¦ ³ªÅ¸³¿
+// Pair êµ¬ì¡°ì²´: aì™€ bë¥¼ ì €ì¥í•˜ì—¬ ìœ í´ë¦¬ë“œ ì•Œê³ ë¦¬ì¦˜ì˜ ìƒíƒœë¥¼ ë‚˜íƒ€ëƒ„
 typedef struct {
     int a;
     int b;
 } Pair;
 
-// Stack ±¸Á¶Ã¼: Pair¸¦ ÀúÀåÇÏ´Â ½ºÅÃ
+// Stack êµ¬ì¡°ì²´: Pairë¥¼ ì €ì¥í•˜ëŠ” ìŠ¤íƒ
 typedef struct {
     Pair data[MAX_STACK_SIZE];
     int top;
 } Stack;
 
-// ½ºÅÃ ÃÊ±âÈ­
+// ìŠ¤íƒ ì´ˆê¸°í™”
 void initStack(Stack* s) {
     s->top = -1;
 }
 
-// ½ºÅÃÀÌ ºñ¾ú´ÂÁö °Ë»ç
+// ìŠ¤íƒì´ ë¹„ì—ˆëŠ”ì§€ ê²€ì‚¬
 int isEmpty(Stack* s) {
     return s->top == -1;
 }
 
-// ½ºÅÃÀÌ °¡µæ Ã¡´ÂÁö °Ë»ç
+// ìŠ¤íƒì´ ê°€ë“ ì°¼ëŠ”ì§€ ê²€ì‚¬
 int isFull(Stack* s) {
     return s->top == MAX_STACK_SIZE - 1;
 }
 
-// ½ºÅÃ¿¡ µ¥ÀÌÅÍ »ğÀÔ
+// ìŠ¤íƒì— ë°ì´í„° ì‚½ì…
 void push(Stack* s, Pair item) {
     if (isFull(s)) {
         fprintf(stderr, "Stack overflow\n");
@@ -40,7 +40,7 @@ void push(Stack* s, Pair item) {
     s->data[++(s->top)] = item;
 }
 
-// ½ºÅÃ¿¡¼­ µ¥ÀÌÅÍ »èÁ¦ ¹× ¹İÈ¯
+// ìŠ¤íƒì—ì„œ ë°ì´í„° ì‚­ì œ ë° ë°˜í™˜
 Pair pop(Stack* s) {
     if (isEmpty(s)) {
         fprintf(stderr, "Stack underflow\n");
@@ -54,32 +54,32 @@ int main(void) {
     FILE* outputFile = fopen("output.txt", "w");
 
     if (!inputFile || !outputFile) {
-        fprintf(stderr, "ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù.\n");
+        fprintf(stderr, "íŒŒì¼ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n");
         return 1;
     }
 
     int num1, num2;
     if (fscanf(inputFile, "%d %d", &num1, &num2) != 2) {
-        fprintf(stderr, "Àß¸øµÈ ÀÔ·Â\n");
+        fprintf(stderr, "ì˜ëª»ëœ ì…ë ¥\n");
         fclose(inputFile);
         fclose(outputFile);
         return 1;
     }
     fclose(inputFile);
 
-    // ÃÖ¼Ò°ø¹è¼ö °è»êÀ» À§ÇØ ¿ø·¡ ÀÔ·Â°ª ÀúÀå
+    // ìµœì†Œê³µë°°ìˆ˜ ê³„ì‚°ì„ ìœ„í•´ ì›ë˜ ì…ë ¥ê°’ ì €ì¥
     int original_a = num1;
     int original_b = num2;
 
     Stack stack;
     initStack(&stack);
 
-    // ÃÊ±â »óÅÂ¸¦ ½ºÅÃ¿¡ Çª½Ã: (a, b)
+    // ì´ˆê¸° ìƒíƒœë¥¼ ìŠ¤íƒì— í‘¸ì‹œ: (a, b)
     Pair p = { num1, num2 };
     push(&stack, p);
 
     int gcd = 0;
-    // À¯Å¬¸®µå ¾Ë°í¸®ÁòÀ» ½ºÅÃÀ» ÀÌ¿ëÇØ ¹İº¹ ½ÇÇà
+    // ìœ í´ë¦¬ë“œ ì•Œê³ ë¦¬ì¦˜ì„ ìŠ¤íƒì„ ì´ìš©í•´ ë°˜ë³µ ì‹¤í–‰
     while (!isEmpty(&stack)) {
         Pair current = pop(&stack);
         if (current.b == 0) {
@@ -92,11 +92,11 @@ int main(void) {
         }
     }
 
-    // ÃÖ¼Ò°ø¹è¼ö LCM = (a * b) / gcd
+    // ìµœì†Œê³µë°°ìˆ˜ LCM = (a * b) / gcd
     int lcm = (original_a * original_b) / gcd;
 
-    fprintf(outputFile, "ÃÖ´ë°ø¾à¼ö: %d\n", gcd);
-    fprintf(outputFile, "ÃÖ¼Ò°ø¹è¼ö: %d\n", lcm);
+    fprintf(outputFile, "ìµœëŒ€ê³µì•½ìˆ˜: %d\n", gcd);
+    fprintf(outputFile, "ìµœì†Œê³µë°°ìˆ˜: %d\n", lcm);
     fclose(outputFile);
 
     return 0;
